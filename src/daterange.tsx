@@ -5,7 +5,6 @@ import Box from "@mui/material/Box";
 import { DateRangeProps } from "./interface";
 import { inputParms } from "./dateutils";
 import { DateField } from "./datefield";
-import { useHelpContext } from "./helpprovider";
 
 const TextFieldDash: React.FC = () => {
   return (
@@ -37,8 +36,6 @@ export default function DateRange(props: DateRangeProps) {
   };
 
   const dateSpan = inputParms({ start: startDate || dates.start, end: endDate || dates.end }, rangeScope);
-  const topRow = useHelpContext().showHelp ? "Enter Range" : dateSpan.string;
-
   return (
     <div>
         <Grid container spacing={0.5} paddingLeft={0.3} alignItems="center">

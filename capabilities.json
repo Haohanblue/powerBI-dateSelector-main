@@ -35,6 +35,17 @@
         }
     ],
     "objects": {
+        "filterState": {
+            "displayName": "Filter State",
+            "properties": {
+              "startDate": {
+                "type": { "text": true }
+              },
+              "endDate": {
+                "type": { "text": true }
+              }
+            }
+          },
         "general": {
             "displayName": "General",
             "displayNameKey": "Visual_General",

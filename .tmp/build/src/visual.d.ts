@@ -20,6 +20,8 @@ export declare class Visual implements IVisual {
     private prevFilteredStartDate;
     private prevFilteredEndDate;
     private host;
+    private isUpdating;
+    private isInitializing;
     constructor(options: VisualConstructorOptions);
     update(options: VisualUpdateOptions): any;
     private initializeValues;

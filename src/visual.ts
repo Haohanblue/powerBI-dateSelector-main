@@ -77,7 +77,9 @@ export class Visual implements IVisual {
   private prevFilteredStartDate: Date | null = null;
   private prevFilteredEndDate: Date | null = null;
   private host: powerbi.extensibility.visual.IVisualHost;
-
+  private isUpdating: boolean = false;
+  private isInitializing: boolean = false;
+  
   constructor(options: VisualConstructorOptions) {
     // console.log('Visual constructor', options);
     this.formattingSettingsService = new FormattingSettingsService();
@@ -90,6 +92,10 @@ export class Visual implements IVisual {
   }
 
   public update(options: VisualUpdateOptions) {
+    if (this.isUpdating) {
+      this.isUpdating = false; // 重置标志位
+      return; // 跳过后续的更新逻辑
+    }
     // console.log("opt: ",options)
     if (!Visual.areOptionsValid(options)) {
       this.clearData();
@@ -108,7 +114,6 @@ export class Visual implements IVisual {
     const isSettingsUpdate = this.previousSettings !== this.formattingSettings;
 
     const dataView: DataView = options.dataViews[0];
-
     if (Visual.isDataViewValid(dataView)) {
       this.clearData();
       return null;
@@ -122,7 +127,7 @@ export class Visual implements IVisual {
 
       // Initialise the filter
       this.filterTarget = extractFilterColumnTarget(cat);
-      this.setFilterValues(options.jsonFilters as AdvancedFilter[]);
+      this.setFilterValues(dataView); // 这是正确的调用
 
       const minDate: Date = this.parseDate(cat.values[0]);
       const maxDate: Date = this.parseDate(cat.values[len]);
@@ -134,24 +139,25 @@ export class Visual implements IVisual {
       DateCardClass.update({
         rangeScope: this.rangeScope,
       });
+      
     }
 
     this.initializeValues(isSettingsUpdate);
   }
 
   private initializeValues = (isSettingsUpdate: boolean) => {
+    if (this.isInitializing) {
+      return;
+    }
+    this.isInitializing = true;
+  
     const calendar = this.formattingSettings.calendarCard;
     const startRange = calendar.startRange.value.toString();
-    // console.log("init? ",this.initialized)
-
-    if (
-      startRange === "sync" ||
-      (this.dateInitRange === startRange && this.start) 
-      // check if an init range has already been set up
-      ) {
+  
+    if (this.start && this.end) {
       this.dateRangeFilter = {
-        start: this.start === null ? this.rangeScope.start : this.start,
-        end: this.end === null ? this.rangeScope.end : this.end,
+        start: this.start,
+        end: this.end,
       };
     } else {
       this.dateRangeFilter = getInitRange(
@@ -162,15 +168,21 @@ export class Visual implements IVisual {
       );
       this.dateInitRange = startRange;
     }
-
+  
     DateCardClass.update({
       dates: this.dateRangeFilter,
     });
-
-    this.handleVal([this.dateRangeFilter.start, this.dateRangeFilter.end]);
-
+  
+    // 比较当前日期范围和之前的日期范围，只有在变化时才调用 handleVal
+    if (
+      this.dateRangeFilter.start?.getTime() !== this.prevFilteredStartDate?.getTime() ||
+      this.dateRangeFilter.end?.getTime() !== this.prevFilteredEndDate?.getTime()
+    ) {
+      this.handleVal([this.dateRangeFilter.start, this.dateRangeFilter.end]);
+    }
+  
     this.initialized = true;
-
+    this.isInitializing = false;
     if (isSettingsUpdate) {
       this.previousSettings = this.formattingSettings;
       const style = this.formattingSettings.styleCard;
@@ -181,7 +193,7 @@ export class Visual implements IVisual {
       const month = this.formattingSettings.monthCard;
       const quarter = this.formattingSettings.quarterCard;
       const year = this.formattingSettings.yearCard;
-
+  
       DateCardClass.update({
         weekStartDay: this.getDayNum(calendar.weekStartDay.value.valueOf()),
         yearStartMonth: this.getNum(calendar.yearStartMonth.value.valueOf()),
@@ -234,6 +246,7 @@ export class Visual implements IVisual {
 
   private clearData(): void {
     // console.log('cleared ');
+    console.log("clearData调用了")
     this.initialized = false;
     this.dateInitRange = "";
     // DateCardClass.update(initialState);
@@ -258,27 +271,36 @@ export class Visual implements IVisual {
     this.updatePrevFilterState(this.start, this.end, this.filterTarget);
   };
 
-  private setFilterValues = (jsonFilters: AdvancedFilter[]) => {
-    if (
-      jsonFilters &&
-      jsonFilters[0] &&
-      jsonFilters[0].conditions &&
-      jsonFilters[0].conditions[0] &&
-      jsonFilters[0].conditions[1]
-    ) {
-      const startDate: Date = new Date(`${jsonFilters[0].conditions[0].value}`);
-      const endDate: Date = new Date(`${jsonFilters[0].conditions[1].value}`);
-
-      if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
-        this.start = startDate;
-        this.end = endDate;
+  private setFilterValues = (dataView: DataView) => {
+    if (dataView && dataView.metadata && dataView.metadata.objects) {
+      const objects = dataView.metadata.objects;
+      const filterState = objects['filterState'];
+      if (filterState) {
+        const startDateStr = filterState['startDate'] as string;
+        const endDateStr = filterState['endDate'] as string;
+        if (startDateStr && endDateStr) {
+          const startDate = new Date(startDateStr);
+          const endDate = new Date(endDateStr);
+          if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
+            this.start = startDate;
+            this.end = endDate;
+          } else {
+            this.start = null;
+            this.end = null;
+          }
+        } else {
+          this.start = null;
+          this.end = null;
+        }
       } else {
         this.start = null;
+        this.end = null;
       }
     } else {
       this.start = null;
+      this.end = null;
     }
-  };
+  }
 
   // Apply the filter
   public applyDatePeriod(
@@ -286,12 +308,30 @@ export class Visual implements IVisual {
     endDate: Date,
     filterTarget: IFilterColumnTarget
   ): void {
+    this.isUpdating = true; // 设置更新标志位
+  
     this.host.applyJsonFilter(
       this.createFilter(startDate, endDate, filterTarget),
       Visual.filterObjectProperty.objectName,
       Visual.filterObjectProperty.propertyName,
       this.getFilterAction(startDate, endDate)
     );
+  
+    // 持久化筛选器状态
+    const properties: { [propertyName: string]: powerbi.DataViewPropertyValue } = {
+      "startDate": startDate ? startDate.toISOString() : null,
+      "endDate": endDate ? endDate.toISOString() : null
+    };
+  
+    const instance: powerbi.VisualObjectInstance = {
+      objectName: "filterState",
+      properties: properties,
+      selector: null
+    };
+  
+    this.host.persistProperties({
+      replace: [instance]
+    });
   }
 
   // Create the filter
@@ -333,10 +373,9 @@ export class Visual implements IVisual {
     target: IFilterColumnTarget
   ): void {
     const isFilterChanged: boolean =
-      String(this.prevFilteredStartDate) !== String(startDate) ||
-      String(this.prevFilteredEndDate) !== String(endDate);
-    // console.log("isFilterChanged", isFilterChanged)
-    // console.log("isFilterChanged", isFilterChanged)
+      this.prevFilteredStartDate?.getTime() !== startDate.getTime() ||
+      this.prevFilteredEndDate?.getTime() !== endDate.getTime();
+  
     if (isFilterChanged) {
       this.applyDatePeriod(startDate, endDate, target);
     }
@@ -399,20 +438,22 @@ export class Visual implements IVisual {
   }
   private parseDate(value: any): Date | null {
     const typeOfValue: string = typeof value;
-    let date: Date = value;
-
+    let date: Date;
+  
     if (typeOfValue === "number") {
-      date = new Date(value, 0);
-    }
-
-    if (typeOfValue === "string") {
       date = new Date(value);
+    } else if (typeOfValue === "string") {
+      date = new Date(value);
+    } else if (value instanceof Date) {
+      date = value;
+    } else {
+      return null;
     }
-
-    if (date && date instanceof Date && date.toString() !== "Invalid Date") {
-      return this.getYmd(date);
+  
+    if (!isNaN(date.getTime())) {
+      return date; // 返回包含时间组件的日期
     }
-
+  
     return null;
   }
 

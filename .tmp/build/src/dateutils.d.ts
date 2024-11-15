@@ -23,14 +23,7 @@ export declare const year: (i: number, yearStartMonth: number) => dateRange;
 export declare const getInitRange: (startRange: string, weekStartDay?: 0 | 1 | 2 | 3 | 4 | 5 | 6, yearStartMonth?: number, rangeScope?: dateRange, rtn?: string) => any;
 export declare const getRange: (fn: string, step: string, dates: any) => any;
 /** Current Period Parameters */
-export declare const Increment: (stepViz: stepBool, weekStartDay: 0 | 1 | 2 | 3 | 4 | 5 | 6, yearStartMonth: number, payProps?: any, vizOpt?: boolean, scope?: Interval) => {
-    tip: string;
-    step: string;
-    show: boolean;
-    thisPeriod: string;
-    thisRange: any;
-    icon: JSX.Element;
-}[];
+export declare const Increment: (stepViz: stepBool, weekStartDay: 0 | 1 | 2 | 3 | 4 | 5 | 6, yearStartMonth: number, payProps?: any, vizOpt?: boolean, scope?: Interval) => any[];
 export declare const sliderMarkNumber: (val: Date, min: Date) => number;
 export declare const sliderMarkDate: (val: number, min: Date) => Date;
 export declare const sliderMarkText: (num: number, min: Date, fmt?: string) => string;

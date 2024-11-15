@@ -1,14 +1,9 @@
 import * as React from "react";
-import Grid from "@mui/material/Unstable_Grid2";
-import Zoom from "@mui/material/Zoom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useHotkeys } from "react-hotkeys-hook";
 import TopRow from "./daterangetoprow";
-import Timeline from "./timeline";
 import { dateCardProps } from "./interface";
-import { dateMoveKeys } from "./datemovekeys";
 import { Increment } from "./dateutils";
-import { HelpProvider } from "./helpprovider";
 
 export default function DateRangeCard(props: dateCardProps) {
   const {
@@ -17,20 +12,16 @@ export default function DateRangeCard(props: dateCardProps) {
     weekStartDay,
     yearStartMonth,
     stepInit,
-    stepSkip,
     stepViz,
     vizOpt,
-    stepFmt,
     payProps,
     themeColor,
     themeFont,
     themeMode,
     showCurrent,
     showIconText,
-    show2ndSlider,
     handleVal,
-    showSlider,
-    showHelpIcon,
+    showSlider
   } = props;
 
   const theme = createTheme({
@@ -71,13 +62,12 @@ export default function DateRangeCard(props: dateCardProps) {
     setOpenSlider(!openSlider);
   };
 
-  dateMoveKeys(handleVal, stepValue, dates, current);
   useHotkeys("s", () => toggleSlider(), [openSlider]);
 
   return (
     <>
       <ThemeProvider theme={theme}>
-        <HelpProvider showHelpIcon={showHelpIcon}>
+        
           <TopRow
             openSlider={openSlider}
             toggleSlider={toggleSlider}
@@ -96,23 +86,7 @@ export default function DateRangeCard(props: dateCardProps) {
             setStepValue={setStepValue}
             current={current}
           />
-          <Zoom in={!openSlider}>
-            <Grid container spacing={0} xs={12}>
-              <Timeline
-                dates={dates}
-                rangeScope={rangeScope}
-                stepValue={stepValue}
-                payProps={payProps}
-                handleVal={handleVal}
-                stepFmt={stepFmt}
-                stepSkip={stepSkip}
-                weekStartDay={weekStartDay}
-                yearStartMonth={yearStartMonth}
-                show2ndSlider={show2ndSlider}
-              />
-            </Grid>
-          </Zoom>
-        </HelpProvider>
+        
       </ThemeProvider>
     </>
   );

@@ -6,7 +6,6 @@ import { DateRangeProps } from "./interface";
 import { inputParms } from "./dateutils";
 import { DateField } from "./datefield";
 import { useHelpContext } from "./helpprovider";
-import RngeTooltip from "./rngetooltip";
 
 const TextFieldDash: React.FC = () => {
   return (
@@ -42,12 +41,6 @@ export default function DateRange(props: DateRangeProps) {
 
   return (
     <div>
-      <RngeTooltip
-        title={undefined}
-        topRow={topRow}
-        detailRow={dateSpan.string}
-        placement="bottom"
-      >
         <Grid container spacing={0.5} paddingLeft={0.3} alignItems="center">
           <Grid xs="auto">
             <DateField
@@ -69,7 +62,6 @@ export default function DateRange(props: DateRangeProps) {
             />
           </Grid>
         </Grid>
-      </RngeTooltip>
     </div>
   );
 }

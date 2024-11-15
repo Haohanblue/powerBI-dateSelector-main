@@ -39,7 +39,7 @@ export default class DateCardClass extends React.Component<
   // 日期改变的处理函数，接收一个日期数组作为参数
   public onDateChanged = (e: Date[]) => {
     console.log("onDateChanged", e);
-    console.log(format(e[0], "dd-MM-yyyy"))
+    
     // 判断日期数组是否有效，且与当前 state 中的日期不同
     if (
       e.length &&

@@ -53,10 +53,8 @@ import isLastDayOfMonth from "date-fns/isLastDayOfMonth";
 import isFirstDayOfMonth from "date-fns/isFirstDayOfMonth";
 import isWithinInterval from "date-fns/isWithinInterval";
 import { stepBool, dateRange, SliderProps } from "./interface";
-import { DATEUTILS } from "./constants";
 import getDay from 'date-fns/getDay'
 
-const { periodTip, periodThis, periodGranularity } = DATEUTILS;
 
 /** Date Movement functions **/
 
@@ -457,92 +455,6 @@ export const Increment = (
 ) => {
   const _rnge = getInitRange("today", weekStartDay, yearStartMonth, { start: null, end: null }, "matrix" );
   return [
-    {
-      tip: periodTip.day, step: periodGranularity.day,
-      show: stepViz.day,
-      thisPeriod: periodThis.day,
-      thisRange: _rnge["today"],
-      icon: <TodayIcon style={{ fontSize: 16 }} color="primary" />,
-    },
-    {
-      tip: periodTip.week, step: periodGranularity.week,
-      show: stepViz.week,
-      thisPeriod: periodThis.week,
-      thisRange: _rnge["thisWeek"],
-      icon: <DateRangeIcon style={{ fontSize: 16 }} color="primary" />,
-    },
-    {
-      tip: periodTip.pay, step: periodGranularity.pay,
-      show: stepViz.pay,
-      thisPeriod: periodThis.pay + payProps.desc,
-      thisRange: getPayPeriod(payProps.ref, startOfToday(), payProps.len),
-      icon: <PaymentIcon style={{ fontSize: 16 }} color="primary" />,
-    },
-    {
-      tip: periodTip.month, step: periodGranularity.month,
-      show: stepViz.month,
-      thisPeriod: periodThis.month,
-      thisRange: _rnge["thisMonth"],
-      icon: <EventNoteIcon style={{ fontSize: 16 }} color="primary" />,
-    },
-    {
-      tip: periodTip.quarter, step: periodGranularity.quarter,
-      show: stepViz.quarter,
-      thisPeriod: periodThis.quarter,
-      thisRange: _rnge["thisQuarter"],
-      icon: <DynamicFeedIcon style={{ fontSize: 16 }} color="primary" />,
-    },
-    {
-      tip: periodTip.year, step: periodGranularity.year,
-      show: stepViz.year,
-      thisPeriod: periodThis.year,
-      thisRange: _rnge["thisYear"],
-      icon: <LineStyleIcon style={{ fontSize: 16 }} color="primary" />,
-    },
-    {
-      tip: "", step: null,
-      show: (stepViz.day || stepViz.year) && vizOpt,
-      thisPeriod: periodThis.more, //"more",
-      thisRange: null,
-      icon: (
-        <MoreHoriz style={{ fontSize: 12, opacity: 0.5 }} color="primary" />
-      ),
-    },
-    {
-      tip: "", step: periodGranularity.range,
-      show: true,
-      thisPeriod: periodThis.range,
-      thisRange: scope,
-      icon: <SettingsEthernetIcon style={{ fontSize: 16 }} color="primary" />,
-    },
-    {
-      tip: "", step: periodGranularity.ytd,
-      show: stepViz.day || stepViz.year,
-      thisPeriod: periodThis.ytd, //YTD
-      thisRange: _rnge["ytdToday"],
-      icon: <PlayArrow style={{ fontSize: 16, opacity: 0.7 }} color="primary" />,
-    },
-    {
-      tip: "", step: periodGranularity.yearPast,
-      show: stepViz.day || stepViz.year,
-      thisPeriod: periodThis.yearPast, //"Year Past"
-      thisRange: _rnge["ytToday"],
-      icon: <SwitchLeft style={{ fontSize: 16, opacity: 0.7 }} color="primary" />,
-    },
-    {
-      tip: "", step: periodGranularity.ytdLastMonth,
-      show: stepViz.month || stepViz.year,
-      thisPeriod: periodThis.ytdLastMonth, //"YTD Last Month",
-      thisRange: _rnge["ytdLastMonth"],
-      icon: <SkipPrevious style={{ fontSize: 16, opacity: 0.7 }} color="primary" />,
-    },
-    {
-      tip: "", step: periodGranularity.ytdThisMonth,
-      show: stepViz.month || stepViz.year,
-      thisPeriod: periodThis.ytdThisMonth, //"YTD This Month",
-      thisRange: _rnge["ytdThisMonth"],
-      icon: <SkipNext style={{ fontSize: 16, opacity: 0.7 }} color="primary" />,
-    },
   ];
 };
 

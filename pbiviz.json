@@ -1,0 +1,25 @@
+{
+    "visual": {
+        "name": "dateSelector",
+        "displayName": "DateSelector",
+        "guid": "dateSel4A1A0033E6F54D1B809B6E51058D54E3",
+        "visualClassName": "Visual",
+        "version": "1.0.0.0",
+        "description": "Date Range Selector",
+        "supportUrl": "https://tambla.com.au",
+        "gitHubUrl": ""
+    },
+    "apiVersion": "5.3.0",
+    "author": {
+        "name": "jro",
+        "email": "josborn@tambla.com.au"
+    },
+    "assets": {
+        "icon": "assets/timeline.png"
+    },
+    "style": "style/visual.less",
+    "capabilities": "capabilities.json",
+    "dependencies": null,
+    "stringResources": [],
+    "version":"1.0.0.0"
+}

@@ -5,9 +5,9 @@ import VisualConstructorOptions = powerbiVisualsApi.extensibility.visual.VisualC
 import DialogConstructorOptions = powerbiVisualsApi.extensibility.visual.DialogConstructorOptions;
 var powerbiKey: any = "powerbi";
 var powerbi: any = window[powerbiKey];
-var dateSel4A1A0033E6F54D1B809B6E51058D54E3: IVisualPlugin = {
-    name: 'dateSel4A1A0033E6F54D1B809B6E51058D54E3',
-    displayName: 'DateSelector',
+var DateTime_Picker: IVisualPlugin = {
+    name: 'DateTime_Picker',
+    displayName: 'DateTime Picker',
     class: 'Visual',
     apiVersion: '5.3.0',
     create: (options?: VisualConstructorOptions) => {
@@ -27,6 +27,6 @@ var dateSel4A1A0033E6F54D1B809B6E51058D54E3: IVisualPlugin = {
 if (typeof powerbi !== "undefined") {
     powerbi.visuals = powerbi.visuals || {};
     powerbi.visuals.plugins = powerbi.visuals.plugins || {};
-    powerbi.visuals.plugins["dateSel4A1A0033E6F54D1B809B6E51058D54E3"] = dateSel4A1A0033E6F54D1B809B6E51058D54E3;
+    powerbi.visuals.plugins["DateTime_Picker"] = DateTime_Picker;
 }
-export default dateSel4A1A0033E6F54D1B809B6E51058D54E3;
+export default DateTime_Picker;

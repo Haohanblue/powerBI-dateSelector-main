@@ -1,21 +1,21 @@
 {
     "visual": {
-        "name": "dateSelector",
-        "displayName": "DateSelector",
-        "guid": "dateSel4A1A0033E6F54D1B809B6E51058D54E3",
+        "name": "DateTime Picker",
+        "displayName": "DateTime Picker",
+        "guid": "DateTime_Picker",
         "visualClassName": "Visual",
         "version": "1.0.0.0",
-        "description": "Date Range Selector",
-        "supportUrl": "https://tambla.com.au",
-        "gitHubUrl": ""
+        "description": "DateTimeSelector Range Selector",
+        "supportUrl": "https://github.com/Haohanblue",
+        "gitHubUrl": "https://github.com/Haohanblue"
     },
     "apiVersion": "5.3.0",
     "author": {
-        "name": "jro",
-        "email": "josborn@tambla.com.au"
+        "name": "haohan",
+        "email": "haohanblue@foxmail.com"
     },
     "assets": {
-        "icon": "assets/timeline.png"
+        "icon": "assets/datetimepickerbt.png"
     },
     "style": "style/visual.less",
     "capabilities": "capabilities.json",

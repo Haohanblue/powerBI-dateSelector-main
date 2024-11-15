@@ -84,7 +84,7 @@ export class Visual implements IVisual {
     // console.log('Visual constructor', options);
     this.formattingSettingsService = new FormattingSettingsService();
     this.reactRoot = React.createElement(DateCardClass, {
-      onChanged: this.handleVal,
+      onChanged: this.handleVal
     });
     this.target = options.element;
     this.host = options.host;
@@ -186,57 +186,12 @@ export class Visual implements IVisual {
     if (isSettingsUpdate) {
       this.previousSettings = this.formattingSettings;
       const style = this.formattingSettings.styleCard;
-      const config = this.formattingSettings.configCard;
-      const day = this.formattingSettings.dayCard;
-      const week = this.formattingSettings.weekCard;
-      const pay = this.formattingSettings.payCard;
-      const month = this.formattingSettings.monthCard;
-      const quarter = this.formattingSettings.quarterCard;
-      const year = this.formattingSettings.yearCard;
+
   
       DateCardClass.update({
         weekStartDay: this.getDayNum(calendar.weekStartDay.value.valueOf()),
         yearStartMonth: this.getNum(calendar.yearStartMonth.value.valueOf()),
         stepInit: calendar.stepInit.value.toString(),
-        stepSkip: {
-          day: 1,
-          week: week.weekSkip.value,
-          pay: pay.paySkip.value,
-          month: month.monthSkip.value,
-          quarter: quarter.quarterSkip.value,
-          year: 1,
-        },
-        stepViz: {
-          day: day.showDay.value,
-          week: week.showWeek.value,
-          pay: pay.showPay.value,
-          month: month.showMonth.value,
-          quarter: quarter.showQuarter.value,
-          year: year.showYear.value,
-        },
-        stepFmt: {
-          day: day.fmtDay.value.toString(),
-          week: week.fmtWeek.value.toString(),
-          pay: pay.fmtPay.value.toString(),
-          month: month.fmtMonth.value.toString(),
-          quarter: quarter.fmtQuarter.value.toString(),
-          year: year.fmtYear.value.toString(),
-        },
-        payProps: {
-          desc: "Pay-Period",
-          ref: new Date(
-            pay.payRefYear.value,
-            this.getNum(pay.payRefMonth.value.valueOf()),
-            pay.payRefDay.value
-          ),
-          len: pay.payLength.value,
-        },
-        showHelpIcon: config.showHelpIcon.value,
-        showCurrent: config.showCurrent.value,
-        vizOpt: config.showMore.value,
-        showIconText: config.showIconText.value,
-        showSlider: !config.showSlider.value,
-        show2ndSlider: config.show2ndSlider.value,
         themeColor: style.themeColor.value.value,
         themeFont: style.themeFont.value,
         themeMode: style.themeMode.value,

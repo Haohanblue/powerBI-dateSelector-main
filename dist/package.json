@@ -1,14 +1,14 @@
 {
 		"version": "1.0.0.0",
-		"author": {"name":"jro","email":"josborn@tambla.com.au"},
+		"author": {"name":"haohan","email":"haohanblue@foxmail.com"},
 		"resources": [
 			{
 				"resourceId": "rId0",
 				"sourceType": 5,
-				"file": "resources/dateSel4A1A0033E6F54D1B809B6E51058D54E3.pbiviz.json"
+				"file": "resources/DateTime_Picker.pbiviz.json"
 			}
 		],
-		"visual": {"name":"dateSelector","displayName":"DateSelector","guid":"dateSel4A1A0033E6F54D1B809B6E51058D54E3","visualClassName":"Visual","version":"1.0.0.0","description":"Date Range Selector","supportUrl":"https://tambla.com.au","gitHubUrl":""},
+		"visual": {"name":"DateTime Picker","displayName":"DateTime Picker","guid":"DateTime_Picker","visualClassName":"Visual","version":"1.0.0.0","description":"DateTimeSelector Range Selector","supportUrl":"https://github.com/Haohanblue","gitHubUrl":"https://github.com/Haohanblue"},
 		"metadata": {
 			"pbivizjson": {
 				"resourceId": "rId0"
